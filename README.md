@@ -19,4 +19,5 @@ npm run start
 ## Credits
 
 > [Wikipedia for node](https://github.com/dopecodez/wikipedia)
+
 > [Express Typescript example](https://www.bezkoder.com/express-typescript-example/)
