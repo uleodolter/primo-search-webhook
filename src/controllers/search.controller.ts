@@ -54,7 +54,7 @@ export default class SearchController {
                 delcategory: [],
                 fulltext: []
             };
-            const links: any = { linktorsrc: [], thumbnail: [] };
+            const links: any = { linktorsrc: [], thumbnail: [], additionallinks: [] };
 
             control.sourceid.push('Wikipedia');
             control.recordid.push(`Wikipedia${summary.pageid}`);
@@ -71,7 +71,9 @@ export default class SearchController {
             display.description.push(summary.description);
             display.abstract.push(summary.extract_html);
             for (const category of categories) {
-                display.subject.push(category.substr(10)); 
+                if (category.startsWith('Kategorie:')) {
+                    display.subject.push(category.substr(10)); 
+                }
             }
 
             links.linktorsrc.push(`$$U${page.fullurl}$$DWikipedia`);
@@ -80,18 +82,18 @@ export default class SearchController {
             } catch (error) {
                 console.log('thumbnail missing');
             }
-            for (const ref in references) {
+            for (const ref of references) {
                 if (ref.startsWith('https://d-nb.info')) {
-                    links.linktorsrc.push(`$$U${ref}$$DLink zu GND`);
+                    links.additionallinks.push(`$$U${ref}$$DLink zu GND`);
                 }
                 if (ref.startsWith('https://lobid.org')) {
-                    links.linktorsrc.push(`$$U${ref}$$DLink zu Lobid`);
+                    links.additionallinks.push(`$$U${ref}$$DLink zu Lobid`);
                 }
                 if (ref.startsWith('https://viaf.org')) {
-                    links.linktorsrc.push(`$$U${ref}$$DLink zu Viaf`);
+                    links.additionallinks.push(`$$U${ref}$$DLink zu Viaf`);
                 }
                 if (ref.startsWith('https://zdb-katalog.de')) {
-                    links.linktorsrc.push(`$$U${ref}$$DLink zu ZDB`);
+                    links.additionallinks.push(`$$U${ref}$$DLink zu ZDB`);
                 }
             }
 
