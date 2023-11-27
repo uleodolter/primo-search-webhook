@@ -73,7 +73,7 @@ export default class SearchController {
 
             links.linktorsrc.push(`$$U${page.fullurl}$$DWikipedia`);
 
-            pnxResult.docs.push({ control: control, display: display, links: links });
+            pnxResult.docs.push({ pnx: { control: control, display: display, links: links } });
         }
         catch (error) {
             console.log(error);
