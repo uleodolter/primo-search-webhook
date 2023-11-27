@@ -48,12 +48,12 @@ export default class SearchController {
                 title: [],
                 source: [],
                 language: [],
-                delivery: {
-                    delcategory: [],
-                    fulltext: []
-                },
                 description: [],
                 abstract: []
+            };
+            const delivery: any = {
+                delcategory: [],
+                fulltext: []
             };
             const links: any = { linktorsrc: [] };
 
@@ -61,19 +61,24 @@ export default class SearchController {
             control.recordid.push(`Wikipedia${summary.pageid}`);
             control.sourcerecordid.push(`${summary.pageid}`);
             control.sourcesystem.push('wikipedia');
+            
+            delivery.delcategory.push('Remote Search Resource');
+            delivery.fulltext.push('no_fulltext');
 
             display.type.push('article');
             display.title.push(summary.title);
             display.source.push('Wikipedia');
             display.language.push('ger');
-            display.delivery.delcategory.push('Remote Search Resource');
-            display.delivery.fulltext.push('no_fulltext');
             display.description.push(summary.description);
             display.abstract.push(summary.extract_html);
 
             links.linktorsrc.push(`$$U${page.fullurl}$$DWikipedia`);
 
-            pnxResult.docs.push({ pnx: { control: control, display: display, links: links } });
+            pnxResult.docs.push({ pnx: {
+                control: control,
+                delivery: delivery,
+                display: display,
+                links: links } });
         }
         catch (error) {
             console.log(error);
