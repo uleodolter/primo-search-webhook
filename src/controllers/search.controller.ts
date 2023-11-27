@@ -42,8 +42,6 @@ export default class SearchController {
         try {
             const summary = await page.summary();
 
-            console.log(summary);
-
             const control: any = { sourceid: [], recordid: [], sourcerecordid: [], sourcesystem: [] };
             const display: any = { type: [], title: [], source: [], language: [], description: [], abstract: [] };
             const links: any = { linktorsrc: [] };
