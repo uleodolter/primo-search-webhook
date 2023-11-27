@@ -48,7 +48,7 @@ export default class SearchController {
 
             control.sourceid.push('Wikipedia');
             control.recordid.push(`Wikipedia${summary.pageid}`);
-            control.sourcerecordid.push(summary.pageid);
+            control.sourcerecordid.push(`${summary.pageid}`);
             control.sourcesystem.push('wikipedia');
 
             display.type.push('article');
