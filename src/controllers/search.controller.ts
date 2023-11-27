@@ -54,7 +54,7 @@ export default class SearchController {
                 delcategory: [],
                 fulltext: []
             };
-            const links: any = { linktorsrc: [], thumbnail: [], additionallinks: [] };
+            const links: any = { linktorsrc: [], thumbnail: [] };
 
             control.sourceid.push('Wikipedia');
             control.recordid.push(`Wikipedia${summary.pageid}`);
@@ -69,7 +69,7 @@ export default class SearchController {
             display.source.push('Wikipedia');
             display.language.push('ger');
             display.description.push(summary.description);
-            display.abstract.push(summary.extract_html);
+            display.abstract.push(summary.extract);
             for (const category of categories) {
                 if (category.startsWith('Kategorie:')) {
                     display.subject.push(category.substr(10)); 
@@ -77,23 +77,21 @@ export default class SearchController {
             }
 
             links.linktorsrc.push(`$$U${page.fullurl}$$DWikipedia`);
-            try {
+            if ('thumbnail' in summary) {
                 links.thumbnail.push(`$$U${summary.thumbnail.source}$$DThumbnail`);
-            } catch (error) {
-                console.log('thumbnail missing');
             }
             for (const ref of references) {
                 if (ref.startsWith('https://d-nb.info')) {
-                    links.additionallinks.push(`$$U${ref}$$DLink zu GND`);
+                    links.linktorsrc.push(`$$U${ref}$$DLink zu GND`);
                 }
                 if (ref.startsWith('https://lobid.org')) {
-                    links.additionallinks.push(`$$U${ref}$$DLink zu Lobid`);
+                    links.linktorsrc.push(`$$U${ref}$$DLink zu Lobid`);
                 }
                 if (ref.startsWith('https://viaf.org')) {
-                    links.additionallinks.push(`$$U${ref}$$DLink zu Viaf`);
+                    links.linktorsrc.push(`$$U${ref}$$DLink zu Viaf`);
                 }
                 if (ref.startsWith('https://zdb-katalog.de')) {
-                    links.additionallinks.push(`$$U${ref}$$DLink zu ZDB`);
+                    links.linktorsrc.push(`$$U${ref}$$DLink zu ZDB`);
                 }
             }
 
