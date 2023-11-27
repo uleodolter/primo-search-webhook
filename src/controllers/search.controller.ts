@@ -54,7 +54,7 @@ export default class SearchController {
                 delcategory: [],
                 fulltext: []
             };
-            const links: any = { linktorsrc: [], thumbnail: [], additionallinks: [] };
+            const links: any = { linktorsrc: [], thumbnail: [] };
 
             control.sourceid.push('Wikipedia');
             control.recordid.push(`Wikipedia${summary.pageid}`);
@@ -70,34 +70,28 @@ export default class SearchController {
             display.language.push('ger');
             display.description.push(summary.description);
             display.abstract.push(summary.extract_html);
-            let subject = '';
-            for (const category in categories) {
-                if (subject.length > 0) {
-                    subject += '; ';
-                }
-                // remove Kategorie:
-                subject += category.substr(10); 
+            for (const category of categories) {
+                display.subject.push(category.substr(10)); 
             }
-            display.subject.push(subject);
 
             links.linktorsrc.push(`$$U${page.fullurl}$$DWikipedia`);
             try {
-                links.linktorsrc.push(`$$U${summary.thumbnail.source}$$DThumbnail`);
+                links.thumbnail.push(`$$U${summary.thumbnail.source}$$DThumbnail`);
             } catch (error) {
                 console.log('thumbnail missing');
             }
             for (const ref in references) {
                 if (ref.startsWith('https://d-nb.info')) {
-                    links.additionallinks.push(`$$U${ref}$$DLink zu GND`);
+                    links.linktorsrc.push(`$$U${ref}$$DLink zu GND`);
                 }
                 if (ref.startsWith('https://lobid.org')) {
-                    links.additionallinks.push(`$$U${ref}$$DLink zu Lobid`);
+                    links.linktorsrc.push(`$$U${ref}$$DLink zu Lobid`);
                 }
                 if (ref.startsWith('https://viaf.org')) {
-                    links.additionallinks.push(`$$U${ref}$$DLink zu Viaf`);
+                    links.linktorsrc.push(`$$U${ref}$$DLink zu Viaf`);
                 }
                 if (ref.startsWith('https://zdb-katalog.de')) {
-                    links.additionallinks.push(`$$U${ref}$$DLink zu ZDB`);
+                    links.linktorsrc.push(`$$U${ref}$$DLink zu ZDB`);
                 }
             }
 
