@@ -54,7 +54,7 @@ export default class SearchController {
                 delcategory: [],
                 fulltext: []
             };
-            const links: any = { linktorsrc: [], thumbnail: [] };
+            const links: any = { linktorsrc: [], thumbnail: [], addlink: [] };
 
             control.sourceid.push('Wikipedia');
             control.recordid.push(`Wikipedia${summary.pageid}`);
@@ -82,16 +82,16 @@ export default class SearchController {
             }
             for (const ref of references) {
                 if (ref.startsWith('https://d-nb.info')) {
-                    links.linktorsrc.push(`$$U${ref}$$DLink zu GND`);
+                    links.addlink.push(`$$U${ref}$$DLink zu GND`);
                 }
                 if (ref.startsWith('https://lobid.org')) {
-                    links.linktorsrc.push(`$$U${ref}$$DLink zu Lobid`);
+                    links.addlink.push(`$$U${ref}$$DLink zu Lobid`);
                 }
                 if (ref.startsWith('https://viaf.org')) {
-                    links.linktorsrc.push(`$$U${ref}$$DLink zu Viaf`);
+                    links.addlink.push(`$$U${ref}$$DLink zu Viaf`);
                 }
                 if (ref.startsWith('https://zdb-katalog.de')) {
-                    links.linktorsrc.push(`$$U${ref}$$DLink zu ZDB`);
+                    links.addlink.push(`$$U${ref}$$DLink zu ZDB`);
                 }
             }
 
