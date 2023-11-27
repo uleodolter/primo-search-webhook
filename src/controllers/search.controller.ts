@@ -43,7 +43,18 @@ export default class SearchController {
             const summary = await page.summary();
 
             const control: any = { sourceid: [], recordid: [], sourcerecordid: [], sourcesystem: [] };
-            const display: any = { type: [], title: [], source: [], language: [], description: [], abstract: [] };
+            const display: any = {
+                type: [],
+                title: [],
+                source: [],
+                language: [],
+                delivery: {
+                    delcategory: [],
+                    fulltext: []
+                },
+                description: [],
+                abstract: []
+            };
             const links: any = { linktorsrc: [] };
 
             control.sourceid.push('Wikipedia');
@@ -55,10 +66,12 @@ export default class SearchController {
             display.title.push(summary.title);
             display.source.push('Wikipedia');
             display.language.push('ger');
+            display.delivery.delcategory.push('Remote Search Resource');
+            display.delivery.fulltext.push('no_fulltext');
             display.description.push(summary.description);
             display.abstract.push(summary.extract_html);
 
-            links.linktorsrc.push(page.fullurl);
+            links.linktorsrc.push(`$$U${page.fullurl}$$DWikipedia`);
 
             pnxResult.docs.push({ control: control, display: display, links: links });
         }
