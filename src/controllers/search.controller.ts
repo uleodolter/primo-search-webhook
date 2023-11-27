@@ -48,7 +48,6 @@ export default class SearchController {
                 source: [],
                 language: [],
                 description: [],
-                abstract: []
             };
             const delivery: any = {
                 delcategory: [],
@@ -69,7 +68,9 @@ export default class SearchController {
             display.source.push('Wikipedia');
             display.language.push('ger');
             display.description.push(summary.description);
-            display.abstract.push(summary.extract);
+            if (summary.extract_html) {
+                display.lds03 = [summary.extract_html];
+            }
             for (const category of categories) {
                 if (category.startsWith('Kategorie:')) {
                     display.subject.push(category.substr(10)); 
