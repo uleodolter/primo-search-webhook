@@ -63,7 +63,7 @@ export default class SearchController {
             control.sourcesystem.push('wikipedia');
             
             delivery.delcategory.push('Remote Search Resource');
-            delivery.fulltext.push('no_fulltext');
+            delivery.fulltext.push('fulltext_linktorsrc');
 
             display.type.push('article');
             display.title.push(summary.title);
