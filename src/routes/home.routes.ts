@@ -2,15 +2,15 @@ import { Router } from "express";
 import { welcome } from "../controllers/home.controller";
 
 class HomeRoutes {
-  router = Router();
+    router = Router();
 
-  constructor() {
-    this.intializeRoutes();
-  }
+    constructor() {
+        this.intializeRoutes();
+    }
 
-  intializeRoutes() {
-    this.router.get("/", welcome);
-  }
+    intializeRoutes() {
+        this.router.get("/", welcome);
+    }
 }
 
 export default new HomeRoutes().router;

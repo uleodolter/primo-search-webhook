@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
 
 export function welcome(req: Request, res: Response): Response {
-  return res.json({ message: "Welcome to Primo Search Webhook application." });
+    return res.json({ message: "Welcome to Primo Search Webhook application." });
 }
