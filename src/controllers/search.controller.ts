@@ -4,30 +4,22 @@ import { wikiSearchResult, wikiSummary, summaryError } from 'wikipedia';
 
 export default class SearchController {
   async findAll(req: Request, res: Response) {
-    let limit: number = 10;
-    let offset: number = 0;
-    let query: string = ''; 
+    let limit = 10;
+    let offset = 0;
+    let query = ''; 
     const token = req.query.token;
 
     if (typeof req.query.bulkSize === 'string') {
-        try {
-           limit = parseInt(req.query.bulkSize);
-        }
-        catch (err) {
-        }
+        limit = parseInt(req.query.bulkSize);
     }
     if (typeof req.query.from === 'string') {
-        try {
-            offset = parseInt(req.query.from) - 1;
-        }
-        catch (err) {
-        }
+        offset = parseInt(req.query.from) - 1;
     }
     if (typeof req.query.query == 'string') {
         query = req.query.query;
     }
 
-    let pnxResult: any = {
+    const pnxResult: any = {
         docs: [],
         facets: [],
         info: {}
@@ -40,12 +32,19 @@ export default class SearchController {
     for (const result of searchResults.results) {
         const page = await wiki.page(result.pageid);
         try {
-            const summary = await page.summary();
+            const summary: wikiSummary = await page.summary();
+            const categories = await page.categories();
+            const references = await page.references();
 
-            const control: any = { sourceid: [], recordid: [], sourcerecordid: [], sourcesystem: [] };
+            const control: any = {
+                sourceid: [],
+                recordid: [],
+                sourcerecordid: [],
+                sourcesystem: [] };
             const display: any = {
                 type: [],
                 title: [],
+                subject: [],
                 source: [],
                 language: [],
                 description: [],
@@ -55,7 +54,7 @@ export default class SearchController {
                 delcategory: [],
                 fulltext: []
             };
-            const links: any = { linktorsrc: [] };
+            const links: any = { linktorsrc: [], thumbnail: [], additionallinks: [] };
 
             control.sourceid.push('Wikipedia');
             control.recordid.push(`Wikipedia${summary.pageid}`);
@@ -71,14 +70,45 @@ export default class SearchController {
             display.language.push('ger');
             display.description.push(summary.description);
             display.abstract.push(summary.extract_html);
+            let subject = '';
+            for (const category in categories) {
+                if (subject.length > 0) {
+                    subject += '; ';
+                }
+                // remove Kategorie:
+                subject += category.substr(10); 
+            }
+            display.subject.push(subject);
 
             links.linktorsrc.push(`$$U${page.fullurl}$$DWikipedia`);
+            try {
+                links.linktorsrc.push(`$$U${summary.thumbnail.source}$$DThumbnail`);
+            } catch (error) {
+                console.log('thumbnail missing');
+            }
+            for (const ref in references) {
+                if (ref.startsWith('https://d-nb.info')) {
+                    links.additionallinks.push(`$$U${ref}$$DLink zu GND`);
+                }
+                if (ref.startsWith('https://lobid.org')) {
+                    links.additionallinks.push(`$$U${ref}$$DLink zu Lobid`);
+                }
+                if (ref.startsWith('https://viaf.org')) {
+                    links.additionallinks.push(`$$U${ref}$$DLink zu Viaf`);
+                }
+                if (ref.startsWith('https://zdb-katalog.de')) {
+                    links.additionallinks.push(`$$U${ref}$$DLink zu ZDB`);
+                }
+            }
 
-            pnxResult.docs.push({ pnx: {
-                control: control,
-                delivery: delivery,
-                display: display,
-                links: links } });
+            pnxResult.docs.push({
+                pnx: {
+                    control: control,
+                    delivery: delivery,
+                    display: display,
+                    links: links
+                }
+            });
         }
         catch (error) {
             console.log(error);
